@@ -1,0 +1,11 @@
+---
+- name: Restart sshd service
+  systemd:
+    name: sshd
+    state: restarted
+    daemon_reload: True
+    enabled: True
+    masked: False
+  listen: restart_sshd
+
+...

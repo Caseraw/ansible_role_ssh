@@ -1,0 +1,29 @@
+---
+galaxy_info:
+  author: Kasra Amirsarvari
+  description: Manage the SSH client and server configuration.
+  company: N/A
+  license: license (BSD, MIT)
+  min_ansible_version: 2.7
+  platforms:
+    - name: Fedora
+      versions:
+        - 28
+        - 29
+        - 30
+        - 31
+    - name: EL
+      versions:
+        - 7
+        - 8
+  galaxy_tags:
+    - ssh
+    - openssh
+    - secureshell
+    - configuration
+    - client
+    - server
+
+dependencies: []
+
+...

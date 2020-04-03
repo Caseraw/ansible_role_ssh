@@ -1,0 +1,53 @@
+---
+- name: Ensure openssh is installed
+  package:
+    name: '{{ role_ssh_required_packages }}'
+    state: present
+
+- name: Populate SSH client configuration files
+  set_fact:
+    role_ssh_client_config_list: '{{ role_ssh_client_config_list | default([]) + vars[item] }}'
+  loop: "{{ vars.keys() | select('match', '^role_ssh_client_config_list_.*$') | list }}"
+
+- name: Manage SSH client configuration files
+  block:
+    - name: Create SSH configuration files directories
+      file:
+        path: '{{ item.path.split("/")[0:-1]|join("/") }}'
+        state: directory
+        mode: '0755'
+      loop: '{{ role_ssh_client_config_list }}'
+
+    - name: Deploy SSH client configuration files
+      template:
+        src: ssh_config.j2
+        dest: '{{ item.path | default(omit) }}'
+        backup: '{{ item.backup | default(omit) }}'
+        owner: '{{ item.owner | default("root") }}'
+        group: '{{ item.group | default("root") }}'
+        mode: '{{ item.mode | default("0644") }}'
+      loop: '{{ role_ssh_client_config_list }}'
+      when:
+        - item.state == 'present'
+  always:
+    - name: Cleanup unwanted SSH client configuration files
+      file:
+        path: '{{ item.path }}'
+        state: absent
+      loop: '{{ role_ssh_client_config_list }}'
+      when:
+        - item.state == 'absent'
+        - item.path != '/etc/ssh/ssh_config'
+
+- name: Deploy SSH server configuration files
+  template:
+    src: sshd_config.j2
+    dest: '{{ role_ssh_server_config.path | default(omit) }}'
+    backup: '{{ role_ssh_server_config.backup | default(omit) }}'
+    owner: '{{ role_ssh_server_config.owner | default("root") }}'
+    group: '{{ role_ssh_server_config.group | default("root") }}'
+    mode: '{{ role_ssh_server_config.mode | default("0644") }}'
+    validate: "/usr/sbin/sshd -T -f %s"
+  notify: restart_sshd
+
+...

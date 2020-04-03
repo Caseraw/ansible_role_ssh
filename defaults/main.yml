@@ -1,0 +1,70 @@
+---
+### Software packages required for installing SSH client & server.
+role_ssh_required_packages:
+  - openssh-clients
+  - openssh-server
+
+### Managing SSH client configuration files.
+## Minimum required values: 'path' and 'state'
+##
+## For better maintainability, the SSH file list is built during runtime by
+## combining all lists together. This will provide the freedom of declaring
+## custom file lists for granular control. The lists require a naming
+## convention by using a pattern. The pattern is rendered as a single list
+## which can be used for iteration with variable: 'role_ssh_client_config_list'
+## The list name pattern needs to start with: 'role_ssh_client_config_list_'
+
+role_ssh_client_config_list_default:
+  - path: /etc/ssh/ssh_config
+    state: present
+    entries:
+      - entry: Include /etc/ssh/ssh_config.d/*.conf
+        entry_parameters: []
+  - path: /etc/ssh/ssh_config.d/99_defaults.conf
+    state: present
+    entries:
+      - entry: Match final all
+        entry_parameters:
+          - GSSAPIAuthentication yes
+          - ForwardX11Trusted yes
+          - SendEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+          - SendEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+          - SendEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+          - SendEnv XMODIFIERS
+
+### SSH server configuration file.
+role_ssh_server_config:
+  path: /etc/ssh/sshd_config
+  parameters:
+    - HostKey /etc/ssh/ssh_host_rsa_key
+    - HostKey /etc/ssh/ssh_host_ecdsa_key
+    - HostKey /etc/ssh/ssh_host_ed25519_key
+    - MACs hmac-sha2-512,hmac-sha2-256
+    - Ciphers aes192-ctr,aes256-ctr
+    - SyslogFacility AUTHPRIV
+    - LogLevel INFO
+    - LoginGraceTime 60
+    - PermitRootLogin no
+    - MaxAuthTries 4
+    - PubkeyAuthentication yes
+    - AuthorizedKeysFile .ssh/authorized_keys
+    - PasswordAuthentication no
+    - GSSAPIAuthentication yes
+    - GSSAPICleanupCredentials yes
+    - UsePAM yes
+    - X11Forwarding yes
+    - UsePrivilegeSeparation sandbox
+    - ClientAliveInterval 1800
+    - ClientAliveCountMax 0
+    - Banner none
+    - AllowTcpForwarding no
+    - AllowAgentForwarding no
+    - TCPKeepAlive no
+    - AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+    - AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+    - AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+    - AcceptEnv XMODIFIERS
+    - Subsystem sftp /usr/libexec/openssh/sftp-server
+    - DenyUsers bin
+
+...

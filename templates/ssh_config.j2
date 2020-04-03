@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+
+{% for entry in item.entries | default([]) %}
+{{ entry.entry }}
+{% for prarameter in entry.entry_parameters | default([]) %}
+    {{ prarameter }}
+{% endfor %}
+{% endfor %}
