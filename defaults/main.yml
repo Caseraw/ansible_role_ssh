@@ -6,7 +6,7 @@ role_ssh_required_packages:
 
 ### Managing SSH client configuration files.
 ## Minimum required values: 'path' and 'state'
-##
+## 
 ## For better maintainability, the SSH file list is built during runtime by
 ## combining all lists together. This will provide the freedom of declaring
 ## custom file lists for granular control. The lists require a naming
