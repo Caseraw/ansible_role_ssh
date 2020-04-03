@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
 
-{% for prarameter in role_ssh_server_config_list_default.parameters | default([]) %}
+{% for prarameter in role_ssh_server_config.parameters | default([]) %}
 {{ prarameter }}
 {% endfor %}
