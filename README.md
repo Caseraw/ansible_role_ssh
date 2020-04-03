@@ -2,6 +2,8 @@
 
 Manage the SSH client and server configuration.
 
+[![Build Status](https://travis-ci.org/Caseraw/ansible_role_ssh.svg?branch=master)](https://travis-ci.org/Caseraw/ansible_role_ssh) [<img src="https://img.shields.io/ansible/role/47612">](https://galaxy.ansible.com/caseraw/ansible_role_ssh) [<img src="https://img.shields.io/ansible/role/d/47612">](https://galaxy.ansible.com/caseraw/ansible_role_ssh) [<img src="https://img.shields.io/ansible/quality/47612">](https://galaxy.ansible.com/caseraw/ansible_role_ssh)
+
 - [Ansible role SSH](#ansible-role-ssh)
   - [License](#license)
   - [Author Information](#author-information)
