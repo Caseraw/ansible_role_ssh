@@ -39,6 +39,10 @@
         - item.state == 'absent'
         - item.path != '/etc/ssh/ssh_config'
 
+- name: Ensure SSH Host keys exist
+  command: ssh-keygen -A
+  changed_when: False
+
 - name: Deploy SSH server configuration files
   template:
     src: sshd_config.j2
